@@ -74,7 +74,7 @@ deploy:
   provider: releases
   api_key: $MyOoth 
   file_glob: true
-  file: "${RELEASE_PKG_FILE}"
+  file: "build-*.zip"
   skip_cleanup: true
   on:
     repo: jfmherokiller/brux-gdk
