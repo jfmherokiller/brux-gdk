@@ -50,7 +50,7 @@ matrix:
           $msys2 pacman --sync --noconfirm --needed cmake mingw-w64-x86_64-ninja
           $msys2 pacman --sync --noconfirm --needed mingw-w64-x86_64-SDL2 mingw-w64-x86_64-SDL2_image mingw-w64-x86_64-SDL2_net mingw-w64-x86_64-SDL2_mixer mingw-w64-x86_64-SDL2_gfx zip
           taskkill //IM gpg-agent.exe //F  # https://travis-ci.community/t/4967
-          export PATH=/C/tools/msys64/mingw64/bin:/C/tools/msys64/usr/bin:$PATH
+          export PATH=/C/tools/msys64/mingw64/bin:$PATH
           export MAKE=mingw32-make  # so that Autotools can find it
           ;;
       esac
@@ -69,7 +69,7 @@ matrix:
       - "/C/tools/msys64"
     script:
     - mkdir build && cd build && cmake .. -DCMAKE_MAKE_PROGRAM=mingw32-make -G "MSYS Makefiles"
-    - mingw32-make && zip -r ../build-windows.zip BruxRelease
+    - mingw32-make && $msys2 zip -r ../build-windows.zip BruxRelease
 deploy:
   provider: releases
   api_key: $MyOoth 
