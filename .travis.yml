@@ -77,4 +77,10 @@ deploy:
   file: build.zip
   on:
     repo: jfmherokiller/brux-gdk
-  skip_cleanup: 'true'
+  cleanup: 'false'
+
+branches:
+  except:
+  - legacy
+  - experimental
+  - /^untagged/
