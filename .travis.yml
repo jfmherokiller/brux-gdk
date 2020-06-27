@@ -72,8 +72,7 @@ matrix:
     - mingw32-make && zip -r ../build.zip BruxRelease
 deploy:
   provider: releases
-  api_key:
-    secure: cT4g/J59e9j4P0Sx09zNNMF8zDARLpdByzyxK2ayCFm5IMPwmzDsy56G0m8BgVuJp/vop1EZpIk5yF2+RKX/4/Es6spv21BhXAivGqos4mkFOXAWk76vFR8OlH0ycG24Lljz2ROGwikrgA+xQIy+R/KnCmsSuU7Hhxozkh82QmHB/Vw5p+gdpBcTxEsoXpk82UoI8+wU46HGTw1psUx0CKRiGCP7J1Cr+ZvYiykS/+9OJAze2sPA79sh8IQ3oqsdNyaAZACvJd1BYwQnA6FwLTDnK/v+TQq8Fx6I+lnHx2EUxBSh7BKIhR2w0BAnLBgeqG+dIq2Sm+CIPeU4tmpS3EHV65cqP2orx+br7nIXYOTI+6m+QVRFyVkOs//vxG6ZC2FNAE6MQs8liEFR+/A5gm//pU2p0os4PAD3/QZu/1xnw5VXseAr1ZV+YjMcKaqDYqD5/WDjtL6iz/NVR6xU9Q9jLz9Ak/+OBGJygNN7g2/invBccALPts4R5FiX6qYqftBmRmB6auq6fZhuP2pXzuF2/5Ej1I4NbG763SZJGd4W9tXBkv/iR2plTXqlInc91+Iy9/7u4D+lX0ASDIr/0TLOMbSBqWgPU7TlNULIwZDlNAb17T5Q8CRhVkN7PbH+YSvI58WRqVXXOFdvoq9zvqCE7UXRjvF/SxnL+cT1+Ic=
+  api_key: $MyOoth 
   file: build.zip
   on:
     repo: jfmherokiller/brux-gdk
