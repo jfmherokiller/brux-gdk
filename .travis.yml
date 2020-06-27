@@ -74,7 +74,7 @@ deploy:
   provider: releases
   api_key: $MyOoth 
   file_glob: true
-  file: build-*.zip
+  file: "${RELEASE_PKG_FILE}"
   skip_cleanup: true
   on:
     repo: jfmherokiller/brux-gdk
@@ -84,3 +84,6 @@ branches:
   - legacy
   - experimental
   - /^untagged/
+
+  before_deploy:
+    - export RELEASE_PKG_FILE="build-$TRAVIS_OS_NAME.zip"
