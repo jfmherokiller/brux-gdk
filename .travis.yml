@@ -69,11 +69,12 @@ matrix:
       - "/C/tools/msys64"
     script:
     - mkdir build && cd build && cmake .. -DCMAKE_MAKE_PROGRAM=mingw32-make -G "MSYS Makefiles"
-    - mingw32-make && zip -r ../build.zip BruxRelease
+    - mingw32-make && zip -r ../build-windows.zip BruxRelease
 deploy:
   provider: releases
   api_key: $MyOoth 
-  file: build.zip
+  file_glob: true
+  file: build-*.zip
   on:
     repo: jfmherokiller/brux-gdk
   cleanup: 'false'
