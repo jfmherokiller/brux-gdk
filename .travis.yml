@@ -32,6 +32,14 @@ matrix:
     script:
     - pip install cmake
     - "./build.sh"
+    deploy:
+      provider: releases
+      api_key: $MyOoth 
+      file_glob: true
+      file: "build-*.zip"
+      skip_cleanup: true
+      on:
+        repo: jfmherokiller/brux-gdk
   - os: windows
     before_install:
     - |-
@@ -68,16 +76,15 @@ matrix:
       - "$HOME/AppData/Local/Temp/chocolatey"
       - "/C/tools/msys64"
     script:
-    - mkdir build && cd build && cmake .. -DCMAKE_MAKE_PROGRAM=mingw32-make -G "MSYS Makefiles"
-    - mingw32-make && tar -zcf build-windows.zip BruxRelease 
-deploy:
-  provider: releases
-  api_key: $MyOoth 
-  file_glob: true
-  file: "build-*.zip"
-  skip_cleanup: true
-  on:
-    repo: jfmherokiller/brux-gdk
+    - mkdir build && cd build && cmake .. -DCMAKE_MAKE_PROGRAM=mingw32-make -G "MSYS Makefiles" && mingw32-make && tar -zcf ../build-windows.zip BruxRelease 
+    deploy:
+      provider: releases
+      api_key: $MyOoth 
+      file_glob: true
+      file: "build-*.zip"
+      skip_cleanup: true
+      on:
+        repo: jfmherokiller/brux-gdk
 
 branches:
   except:
