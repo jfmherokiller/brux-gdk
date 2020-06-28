@@ -82,7 +82,8 @@ matrix:
       api_key: $MyOoth 
       file_glob: true
       file: "build-*.zip"
-      skip_cleanup: true
+      cleanup: true
+      edge: true
       on:
         repo: jfmherokiller/brux-gdk
 
