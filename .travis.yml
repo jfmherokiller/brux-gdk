@@ -19,6 +19,12 @@ matrix:
       - "$HOME/Library/Caches/Homebrew"
     before_cache:
     - brew cleanup
+    deploy:
+      provider: releases
+      api_key: $MyOoth 
+      file_glob: true
+      file: "build-*.zip"
+      skip_cleanup: true
   - os: linux
     dist: bionic
     addons:
@@ -76,14 +82,13 @@ matrix:
       - "$HOME/AppData/Local/Temp/chocolatey"
       - "/C/tools/msys64"
     script:
-    - mkdir build && cd build && cmake .. -DCMAKE_MAKE_PROGRAM=mingw32-make -G "MSYS Makefiles" && mingw32-make && tar -zcf ../build-windows.zip BruxRelease 
+    - mkdir build && cd build && cmake .. -DCMAKE_MAKE_PROGRAM=mingw32-make -G "MSYS Makefiles" && mingw32-make && tar -zcf C:/build-windows.zip BruxRelease 
     deploy:
       provider: releases
       api_key: $MyOoth 
       file_glob: true
-      file: "build-*.zip"
-      cleanup: true
-      edge: true
+      file: "C:/build-windows.zip"
+      skip_cleanup: true
       on:
         repo: jfmherokiller/brux-gdk
 
