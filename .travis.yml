@@ -69,7 +69,7 @@ matrix:
       - "/C/tools/msys64"
     script:
     - mkdir build && cd build && cmake .. -DCMAKE_MAKE_PROGRAM=mingw32-make -G "MSYS Makefiles"
-    - mingw32-make && $msys2 zip -r ../build-windows.zip BruxRelease
+    - mingw32-make && powershell Compress-Archive BruxRelease ../build-windows.zip
 deploy:
   provider: releases
   api_key: $MyOoth 
