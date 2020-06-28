@@ -11,4 +11,4 @@ cmake --build . --config Debug -- -j $(nproc)
 # Test
 #ctest -j $(nproc) --output-on-failure
 
-zip -r "../build-$TRAVIS_OS_NAME.zip" BruxRelease
+tar -zcf "../build-$TRAVIS_OS_NAME.zip" BruxRelease
