@@ -52,7 +52,7 @@ SET(brux_gtk_sources
 
 add_executable(brux-gdk ${brux_gtk_sources})
 if (NOT WIN32)
-    target_link_libraries(brux-gdk squirrelStatic  ${SDL2_LIBRARIES} ${SDL2_IMAGE_LIBRARIES} ${SDL2_NET_LIBRARIES} ${SDL2_GFX_LIBRARIES} ${SDL2_MIXER_LIBRARIES} chipmonkStatic)
+    target_link_libraries(brux-gdk squirrelStatic stdsquirrelStatic ${SDL2_LIBRARIES} ${SDL2_IMAGE_LIBRARIES} ${SDL2_NET_LIBRARIES} ${SDL2_GFX_LIBRARIES} ${SDL2_MIXER_LIBRARIES} chipmonkStatic)
 endif ()
 
 if (WIN32 OR MINGW)
