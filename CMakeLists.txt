@@ -7,26 +7,24 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/BruxRelease)
 set(CMAKE_INSTALL_PREFIX ${CMAKE_BINARY_DIR}/BruxInstall)
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/" CACHE STRING "" FORCE)
 
-if (WIN32 AND NOT MINGW)
-    set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/winLibs" CACHE STRING "" FORCE)
-    include_directories(${PROJECT_SOURCE_DIR}/winLibs/include)
-endif ()
-include(FetchContent)
-FetchContent_Declare(
-        squirrelstf
-        GIT_REPOSITORY https://github.com/albertodemichelis/squirrel.git
-        GIT_TAG master
-)
-FetchContent_MakeAvailable(squirrelstf)
-include_directories(${squirrel_SOURCE_DIR}/include)
-FetchContent_Declare(
-        chipmonk2d
-        GIT_REPOSITORY https://github.com/slembcke/Chipmunk2D.git
-        GIT_TAG 7a8ee9a80a1f6f9659828541aaaa2f0702917708
-)
-FetchContent_MakeAvailable(chipmonk2d)
-include_directories(${chipmonk2d_SOURCE_DIR}/include/chipmunk)
+if(WIN32)
+    set(CMAKE_TOOLCHAIN_FILE ${CMAKE_SOURCE_DIR}/vcpkg/scripts/buildsystems/vcpkg.cmake
+            CACHE STRING "Vcpkg toolchain file")
+    if(NOT EXISTS "${CMAKE_SOURCE_DIR}/vcpkg/vcpkg.exe")
+        execute_process(COMMAND "${CMAKE_SOURCE_DIR}/vcpkg/bootstrap-vcpkg.bat" WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
+    endif()
+    set(MAKE_CMD "vcpkg.exe")
+    list(APPEND MAKE_CMD install sdl2 sdl2-image sdl2-mixer sdl2-net sdl2-ttf sdl2-gfx)
+    set(ENV{VCPKG_ROOT} ${CMAKE_SOURCE_DIR}/vcpkg)
+    execute_process(COMMAND ${MAKE_CMD} WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/vcpkg)
+    execute_process(COMMAND "cmake ." WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/build)
+    #set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/vcpkg/installed/x86-windows/share/sdl2" CACHE STRING "" FORCE)
 
+endif()
+if (WIN32 AND NOT MINGW)
+    #set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/winLibs" CACHE STRING "" FORCE)
+    #include_directories(${PROJECT_SOURCE_DIR}/winLibs/include)
+endif ()
 # set the project name
 project(brux-gdk)
 
