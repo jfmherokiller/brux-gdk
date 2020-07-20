@@ -9,3 +9,6 @@ rte/bin/brux.*
 *.exe
 rte/bin/release/*
 rte/bin/count.txt
+/build/**
+/winLibs/**
+/.idea/**
