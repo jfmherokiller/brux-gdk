@@ -79,9 +79,18 @@ int main(int argc, char* argv[]) {
 	//Run app
 	if(xygapp != "") {
 		xyPrint(0, "Running %s...", xygapp.c_str());
-		sqstd_dofile(gvSquirrel, xygapp.c_str(), 0, 1);
+        auto error = gvScrat->DoFile(xygapp.c_str());
+        if(error != Sqrat::SqratVM::SQRAT_NO_ERROR) {
+            xyPrint(0, "Failed to run %s!", xygapp.c_str());
+            xyPrint(0, "Error: %s", gvScrat->GetLastErrorMsg().c_str());
+        }
 	} else {
-		if(xyFileExists("test.nut")) sqstd_dofile(gvSquirrel, "test.nut", 0, 1);
+        if (xyFileExists("test.nut")) {
+           auto error = gvScrat->DoFile("test.nut");
+            if( error != Sqrat::SqratVM::SQRAT_NO_ERROR ) {
+                xyPrint(0, "Error: %s", gvScrat->GetLastErrorMsg().c_str());
+            }
+        }
 	}
 
 	//End game
@@ -93,7 +102,9 @@ int main(int argc, char* argv[]) {
 ///////////////////
 //OTHER FUNCTIONS//
 ///////////////////
-
+void ErrorPrinter(HSQUIRRELVM vm,const SQChar *desc,const SQChar * source,SQInteger line,SQInteger column) {
+    xyPrint(vm, "Code Error: Desc:%s SRC:%s Line:%i Column:%i",desc,source,line,column);
+}
 //Handles initialization of SDL2 and Squirrel
 int xyInit() {
 	//Initiate log file
@@ -153,25 +164,25 @@ int xyInit() {
 	xyInitInput();
 
 	xyPrint(0, "SDL initialized successfully!");
-
+    gvScrat = new Sqrat::SqratVM();
+    gvScrat->SetPrintFunc(xyPrint, xyPrint);
+    //scratme->SetErrorHandler(xyPrint,ErrorPrinter);
 	//Initiate Squirrel
-	gvSquirrel = sq_open(1024);
+	//gvSquirrel = sq_open(1024);
+	//sq_setprintfunc(gvSquirrel, xyPrint, xyPrint);
+	//sq_pushroottable(gvSquirrel);
 
+	//sqstd_register_iolib(gvSquirrel);
+	//sqstd_register_systemlib(gvSquirrel);
+	//sqstd_register_mathlib(gvSquirrel);
+	//sqstd_register_stringlib(gvSquirrel);
 
-	sq_setprintfunc(gvSquirrel, xyPrint, xyPrint);
-	sq_pushroottable(gvSquirrel);
-
-	sqstd_register_iolib(gvSquirrel);
-	sqstd_register_systemlib(gvSquirrel);
-	sqstd_register_mathlib(gvSquirrel);
-	sqstd_register_stringlib(gvSquirrel);
-
-	xyBindAllFunctions(gvSquirrel);
+	xyBindAllFunctions(gvScrat->GetVM());
 
 	/*Error handler does not seem to print compile-time errors. I haven't
 	been able to figure out why, as the same code works in my other apps,
 	and is taken from the sq.c example included with Squirrel.*/
-	sqstd_seterrorhandlers(gvSquirrel);
+	//sqstd_seterrorhandlers(gvSquirrel);
 
 	xyPrint(0, "Squirrel initialized successfully!");
 
@@ -220,10 +231,10 @@ void xyEnd(){
 
 	//Close Squirrel
 	xyPrint(0, "Closing Squirrel...");
-	SQInteger garbage = sq_collectgarbage(gvSquirrel);
+	SQInteger garbage = sq_collectgarbage(gvScrat->GetVM());
 	xyPrint(0, "Collected %i junk obects.", garbage);
-	sq_pop(gvSquirrel, 1);
-	sq_close(gvSquirrel);
+	//sq_pop(gvSquirrel, 1);
+	//sq_close(gvSquirrel);
 
 	//Close SDL
 	xyPrint(0, "Closing SDL...");
@@ -249,11 +260,7 @@ void xyPrint(HSQUIRRELVM v, const SQChar *s, ...) {
 };
 
 void xyBindFunc(HSQUIRRELVM v, SQFUNCTION func, const SQChar *key) {
-	sq_pushroottable(v);
-	sq_pushstring(v, key, -1);
-	sq_newclosure(v, func, 0);
-	sq_newslot(v, -3, false);
-	sq_pop(v, 1);
+    gvScrat->GetRootTable().SquirrelFunc(key, func);
 };
 
 void xyBindFunc(HSQUIRRELVM v, SQFUNCTION func, const SQChar *key, SQInteger nParams, const SQChar* sParams) {

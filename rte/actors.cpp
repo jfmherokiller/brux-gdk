@@ -83,9 +83,9 @@ void xyLoadActors() {
 	 \
 	print(\"Imported actors lib.\");";
 
-	SQInteger oldtop = sq_gettop(gvSquirrel);
-	sq_compilebuffer(gvSquirrel, cmd, (int)strlen(cmd) * sizeof(SQChar), "actors.nut", 1);
-	sq_pushroottable(gvSquirrel);
-	sq_call(gvSquirrel, 1, SQFalse, SQTrue);
-	sq_settop(gvSquirrel, oldtop);
+	SQInteger oldtop = sq_gettop(gvScrat->GetVM());
+	sq_compilebuffer(gvScrat->GetVM(), cmd, (int)strlen(cmd) * sizeof(SQChar), "actors.nut", 1);
+	sq_pushroottable(gvScrat->GetVM());
+	sq_call(gvScrat->GetVM(), 1, SQFalse, SQTrue);
+	sq_settop(gvScrat->GetVM(), oldtop);
 };

@@ -36,7 +36,9 @@ SET(brux_gtk_sources
         shapes.cpp
         sprite.cpp
         text.cpp
-        physics.cpp)
+        physics.cpp
+        sqratThread.cpp)
+
 
 add_executable(brux-gdk ${brux_gtk_sources})
 if (NOT WIN32)

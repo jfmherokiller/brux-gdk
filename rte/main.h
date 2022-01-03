@@ -50,7 +50,7 @@ void __stack_chk_fail(void);
 #include <squirrel3/sqstdmath.h>
 #include <squirrel3/sqstdstring.h>
 #include <squirrel3/sqstdsystem.h>
-
+#include <sqrat.h>
 using namespace std;
 
 //Defines

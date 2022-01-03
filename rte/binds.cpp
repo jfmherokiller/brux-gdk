@@ -148,7 +148,7 @@ SQInteger sqImport(HSQUIRRELVM v) {
 	b += a;
 	b += ".nut";
 
-	sqstd_dofile(gvSquirrel, b.c_str(), 0, 1);
+	sqstd_dofile(gvScrat->GetVM(), b.c_str(), 0, 1);
 
 	return 0;
 };
@@ -168,7 +168,7 @@ SQInteger sqDoNut(HSQUIRRELVM v) {
 	*/
 
 	xyPrint(0, "Running %s...", a);
-	sqstd_dofile(gvSquirrel, a, 0, 1);
+	sqstd_dofile(gvScrat->GetVM(), a, 0, 1);
 
 	return 0;
 };
@@ -177,11 +177,11 @@ SQInteger sqDoString(HSQUIRRELVM v) {
 	const char* a;
 	sq_getstring(v, 2, &a);
 
-	SQInteger oldtop = sq_gettop(gvSquirrel);
-	sq_compilebuffer(gvSquirrel, a, (int)strlen(a) * sizeof(SQChar), "string", 1);
-	sq_pushroottable(gvSquirrel);
-	sq_call(gvSquirrel, 1, SQFalse, SQTrue);
-	sq_settop(gvSquirrel, oldtop);
+	SQInteger oldtop = sq_gettop(gvScrat->GetVM());
+	sq_compilebuffer(gvScrat->GetVM(), a, (int)strlen(a) * sizeof(SQChar), "string", 1);
+	sq_pushroottable(gvScrat->GetVM());
+	sq_call(gvScrat->GetVM(), 1, SQFalse, SQTrue);
+	sq_settop(gvScrat->GetVM(), oldtop);
 
 	return 0;
 }

@@ -9,12 +9,14 @@
 #include "text.h"
 #include "shapes.h"
 
+
 extern int __stack_chk_guard;
 extern bool gvQuit;					//Let's the game know when to quit
 extern int gvMouseX, gvMouseY;		//Mouse coordinates
 extern Uint32 gvScrW, gvScrH;		//Screen resolution
 extern Uint32 gvWinW, gvWinH;		//Window resolution
-extern HSQUIRRELVM gvSquirrel;		//Squirrel VM
+//extern SQVM *gvSquirrel;		//Squirrel VM
+extern Sqrat::SqratVM *gvScrat;		//Scrat VM
 extern ofstream gvLog;				//Output log
 extern SDL_Window *gvWindow;		//Main window
 extern SDL_Renderer *gvRender;		//Main renderer
