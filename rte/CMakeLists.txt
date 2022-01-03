@@ -1,4 +1,4 @@
-
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
 find_package(SDL2 REQUIRED)
 include_directories(${SDL2_INCLUDE_DIRS})
 if (NOT WIN32)
