@@ -85,11 +85,15 @@ xyFont::xyFont(Uint32 index, Uint32 firstchar, Uint8 threshold, bool monospace, 
 		SDL_Texture* worktex = SDL_CreateTexture(gvRender, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, source->getw(), source->geth());
 
 		//Set render target to temp
-        void *pixels;
+
 		SDL_SetRenderTarget(gvRender, worktex);
         SDL_RenderCopy(gvRender, vcTextures[source->gettex()], 0, 0);
-        SDL_RenderReadPixels(gvRender, NULL, SDL_PIXELFORMAT_RGBA8888, worktex, 0);
-
+        SDL_Texture* streamingTexture = SDL_CreateTexture( gvRender, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_STREAMING, source->getw(), source->geth() );
+        void* streamingPixels;
+        int streamingPitch;
+        SDL_LockTexture( streamingTexture, NULL, &streamingPixels, &streamingPitch );
+        SDL_RenderReadPixels(gvRender, NULL, SDL_PIXELFORMAT_RGBA8888, streamingPixels, streamingPitch);
+        SDL_UnlockTexture( streamingTexture );
 		//For each frame in the source sprite
 		for(int i = 0; i < source->getframes(); i++) {
 			//Render current frame
@@ -120,6 +124,7 @@ xyFont::xyFont(Uint32 index, Uint32 firstchar, Uint8 threshold, bool monospace, 
 		}
 		//Delete temp texture
         SDL_DestroyTexture(worktex);
+        SDL_DestroyTexture(streamingTexture);
 		//Reset render target to stored texture
         SDL_SetRenderTarget(gvRender, ttex);
 	}
