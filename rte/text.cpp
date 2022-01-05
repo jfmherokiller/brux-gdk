@@ -111,7 +111,7 @@ xyFont::xyFont(Uint32 index, Uint32 firstchar, Uint8 threshold, bool monospace, 
                     auto pixel = upixels[k*4+j];
                     auto *PixelParts = (uint8_t *)&pixel;
                     auto Alpha = PixelParts[3];
-                    if(Alpha > 0) {
+                    if(Alpha > threshold) {
                         found = 1;
                         break;
                     }
@@ -128,7 +128,7 @@ xyFont::xyFont(Uint32 index, Uint32 firstchar, Uint8 threshold, bool monospace, 
                     auto pixel = upixels[k*4+j];
                     auto *PixelParts = (uint8_t *)&pixel;
                     auto Alpha = PixelParts[3];
-                    if(Alpha > 0) {
+                    if(Alpha > threshold) {
                         found = 1;
                         break;
                     }
