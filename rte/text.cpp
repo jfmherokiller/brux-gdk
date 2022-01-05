@@ -67,7 +67,7 @@ xyFont::xyFont(Uint32 index, Uint32 firstchar, Uint8 threshold, bool monospace, 
 	//Get frame number and x/width
 	cx.resize(source->getframes());
 	cw.resize(source->getframes());
-	if(true){//Monospace
+	if(monospace){//Monospace
 		if(cx.size() > 0) {
 			for(int i = 0; i < source->getframes(); i++) {
 				cx[i] = 0;
@@ -85,7 +85,10 @@ xyFont::xyFont(Uint32 index, Uint32 firstchar, Uint8 threshold, bool monospace, 
 		SDL_Texture* worktex = SDL_CreateTexture(gvRender, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, source->getw(), source->geth());
 
 		//Set render target to temp
+        void *pixels;
 		SDL_SetRenderTarget(gvRender, worktex);
+        SDL_RenderCopy(gvRender, vcTextures[source->gettex()], 0, 0);
+        SDL_RenderReadPixels(gvRender, NULL, SDL_PIXELFORMAT_RGBA8888, worktex, 0);
 
 		//For each frame in the source sprite
 		for(int i = 0; i < source->getframes(); i++) {
@@ -113,9 +116,12 @@ xyFont::xyFont(Uint32 index, Uint32 firstchar, Uint8 threshold, bool monospace, 
 				}
 			}
 			//Clear texture
+            SDL_RenderClear(gvRender);
 		}
 		//Delete temp texture
+        SDL_DestroyTexture(worktex);
 		//Reset render target to stored texture
+        SDL_SetRenderTarget(gvRender, ttex);
 	}
 
 	start = firstchar;
@@ -127,12 +133,12 @@ void xyFont::draw(int x, int y, string text) {
 	int c; //Current character by font index
 
 	//Loop to end of string
-	for(int i = 0; i < text.length(); i++) {
-		if (text[i] == '\n') {
+	for(char charInString : text) {
+		if (charInString == '\n') {
 			dy += source->geth();
 			dx = x;
 		} else {
-			c = (int)text[i] - start; //Get current character and apply font offset
+			c = (int)charInString - start; //Get current character and apply font offset
 			if (c >= 0 && c < cw.size()){ //Is this character defined in the font?
 				source->draw(c, dx, dy);
 				dx += cw[c] + kern;
