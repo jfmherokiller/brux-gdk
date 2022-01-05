@@ -81,25 +81,25 @@ xyFont::xyFont(Uint32 index, Uint32 firstchar, Uint8 threshold, bool monospace, 
 		SDL_Texture* ttex;
 		ttex = SDL_GetRenderTarget(gvRender);
 
-		//Make temporary texture
+		//Make temporary texturew
 		SDL_Texture* worktex = SDL_CreateTexture(gvRender, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, source->getw(), source->geth());
-
-		//Set render target to temp
-
-		SDL_SetRenderTarget(gvRender, worktex);
-        SDL_RenderCopy(gvRender, vcTextures[source->gettex()], 0, 0);
-        SDL_Texture* streamingTexture = SDL_CreateTexture( gvRender, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_STREAMING, source->getw(), source->geth() );
         void* streamingPixels;
         int streamingPitch;
-        SDL_LockTexture( streamingTexture, NULL, &streamingPixels, &streamingPitch );
-        SDL_RenderReadPixels(gvRender, NULL, SDL_PIXELFORMAT_RGBA8888, streamingPixels, streamingPitch);
-        SDL_UnlockTexture( streamingTexture );
+        SDL_Texture* streamingTexture = SDL_CreateTexture( gvRender, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_STREAMING, source->getw(), source->geth() );
+		//Set render target to temp
+		SDL_SetRenderTarget(gvRender, worktex);
+
+
+
 		//For each frame in the source sprite
 		for(int i = 0; i < source->getframes(); i++) {
 			//Render current frame
 			SDL_RenderClear(gvRender);
 			source->draw(i, 0, 0);
-
+            //lock stream for writing
+            SDL_LockTexture( streamingTexture, NULL, &streamingPixels, &streamingPitch );
+            //write char to texture for access
+            SDL_RenderReadPixels(gvRender, NULL, SDL_PIXELFORMAT_RGBA8888, streamingPixels, streamingPitch);
 			//For each column in source width
 			for(int j = 0; j < source->getw(); j++) {
 				bool found = 0;
@@ -121,8 +121,10 @@ xyFont::xyFont(Uint32 index, Uint32 firstchar, Uint8 threshold, bool monospace, 
 			}
 			//Clear texture
             SDL_RenderClear(gvRender);
+            //unlock stream texture
+            SDL_UnlockTexture( streamingTexture );
 		}
-		//Delete temp texture
+		//Delete temp textures
         SDL_DestroyTexture(worktex);
         SDL_DestroyTexture(streamingTexture);
 		//Reset render target to stored texture
