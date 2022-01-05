@@ -89,8 +89,8 @@ xyFont::xyFont(Uint32 index, Uint32 firstchar, Uint8 threshold, bool monospace, 
 		//Set render target to temp
 		SDL_SetRenderTarget(gvRender, worktex);
 
-
-
+        const auto SomeFormat = SDL_PIXELFORMAT_RGBA8888;
+        Uint8 r, g, b, a;
 		//For each frame in the source sprite
 		for(int i = 0; i < source->getframes(); i++) {
 			//Render current frame
@@ -100,13 +100,22 @@ xyFont::xyFont(Uint32 index, Uint32 firstchar, Uint8 threshold, bool monospace, 
             SDL_LockTexture( streamingTexture, NULL, &streamingPixels, &streamingPitch );
             //write char to texture for access
             SDL_RenderReadPixels(gvRender, NULL, SDL_PIXELFORMAT_RGBA8888, streamingPixels, streamingPitch);
+            Uint32 *upixels = (Uint32*) streamingPixels;
+
 			//For each column in source width
 			for(int j = 0; j < source->getw(); j++) {
 				bool found = 0;
 
 				//For each pixel in the column
 				for(int k = 0; k < source->geth(); k++) {
-					//If pixel alpha is above threshold, set cx here, then break
+                    auto pixel = upixels[k*4+j];
+                    auto *PixelParts = (uint8_t *)&pixel;
+                    auto Alpha = PixelParts[3];
+                    if(Alpha > 0) {
+                        found = 1;
+                        break;
+                    }
+                    //If pixel alpha is above threshold, set cx here, then break
 				}
 			}
 
@@ -116,7 +125,14 @@ xyFont::xyFont(Uint32 index, Uint32 firstchar, Uint8 threshold, bool monospace, 
 
 				//For each pixel in the column
 				for(int k = 0; k < source->geth(); k++) {
-					//If pixel alpha is above threshold, update cw to this coord minus cx, then break
+                    auto pixel = upixels[k*4+j];
+                    auto *PixelParts = (uint8_t *)&pixel;
+                    auto Alpha = PixelParts[3];
+                    if(Alpha > 0) {
+                        found = 1;
+                        break;
+                    }
+                    //If pixel alpha is above threshold, update cw to this coord minus cx, then break
 				}
 			}
 			//Clear texture
