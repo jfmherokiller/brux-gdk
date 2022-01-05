@@ -172,7 +172,7 @@ void xySprite::draw(int f, int x, int y) {
 	rec.y = mar + (fy * h) + (pad * fy);
 	rec.w = w;
 	rec.h = h;
-
+    SDL_SetTextureBlendMode(vcTextures[tex], SDL_BLENDMODE_BLEND);
 	SDL_RenderCopy(gvRender, vcTextures[tex], &rec, &des);
 };
 
