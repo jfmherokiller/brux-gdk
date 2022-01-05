@@ -89,8 +89,6 @@ xyFont::xyFont(Uint32 index, Uint32 firstchar, Uint8 threshold, bool monospace, 
 		//Set render target to temp
 		SDL_SetRenderTarget(gvRender, worktex);
 
-        const auto SomeFormat = SDL_PIXELFORMAT_RGBA8888;
-        Uint8 r, g, b, a;
 		//For each frame in the source sprite
 		for(int i = 0; i < source->getframes(); i++) {
 			//Render current frame
@@ -113,6 +111,7 @@ xyFont::xyFont(Uint32 index, Uint32 firstchar, Uint8 threshold, bool monospace, 
                     auto Alpha = PixelParts[3];
                     if(Alpha > threshold) {
                         found = 1;
+                        cx = k+j;
                         break;
                     }
                     //If pixel alpha is above threshold, set cx here, then break
@@ -131,6 +130,7 @@ xyFont::xyFont(Uint32 index, Uint32 firstchar, Uint8 threshold, bool monospace, 
                     if(Alpha > threshold) {
                         found = 1;
                         break;
+
                     }
                     //If pixel alpha is above threshold, update cw to this coord minus cx, then break
 				}

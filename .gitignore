@@ -16,3 +16,4 @@ test/log.txt
 log.txt
 */log.txt
 build/
+/cmake-build-debug/
