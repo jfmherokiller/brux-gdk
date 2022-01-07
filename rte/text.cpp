@@ -111,7 +111,7 @@ xyFont::xyFont(Uint32 index, Uint32 firstchar, Uint8 threshold, bool monospace, 
                     auto Alpha = PixelParts[3];
                     if(Alpha > threshold) {
                         found = 1;
-                        cx = k+j;
+                        //cx = k+j;
                         break;
                     }
                     //If pixel alpha is above threshold, set cx here, then break
