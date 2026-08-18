@@ -17,7 +17,7 @@
 
 #include "audio/audio.hpp"
 
-#include <SDL2/SDL_mixer.h>
+#include <SDL_mixer.h>
 
 std::vector<Mix_Chunk*> vcSounds;
 std::vector<Mix_Music*> vcMusic;

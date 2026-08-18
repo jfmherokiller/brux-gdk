@@ -21,7 +21,7 @@
 #ifndef BRUX_NET_HPP
 #define BRUX_NET_HPP
 
-#include <SDL2/SDL_net.h>
+#include <SDL_net.h>
 #include <string>
 #include <queue>
 
