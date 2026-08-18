@@ -42,6 +42,7 @@ jobs:
           ARCH: ${{ matrix.arch }}
         run: |
           vcpkg integrate install
+          vcpkg install angle:$Env:ARCH-windows
           vcpkg install sdl2:$Env:ARCH-windows
           vcpkg install sdl2-image[libjpeg-turbo]:$Env:ARCH-windows
           vcpkg install sdl2-mixer:$Env:ARCH-windows
